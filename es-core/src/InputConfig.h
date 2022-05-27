@@ -113,8 +113,6 @@ public:
 	void unmapInput(const std::string& name); // unmap all Inputs mapped to this name
 
 	inline int getDeviceId() const { return mDeviceId; };
-	inline const std::string& getDeviceName() { return mDeviceName; }
-	inline const std::string& getDeviceGUIDString() { return mDeviceGUID; }
 
 	inline int getDeviceIndex() const { return mDeviceIndex; }; 
 	inline const std::string& getDeviceName() { return mDeviceName; }
