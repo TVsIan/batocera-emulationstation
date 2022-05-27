@@ -191,7 +191,7 @@ GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfi
 
 				if (mHeldInput.type == InputType::TYPE_BUTTON)
 				{
-					auto altAxis = mAllInputs.whenre([&](auto x) { return x.device == mHeldInput.device && x.type == InputType::TYPE_AXIS; });
+					auto altAxis = mAllInputs.where([&](auto x) { return x.device == mHeldInput.device && x.type == InputType::TYPE_AXIS; });
 					if (altAxis.size() >= 2)
 					{
 						auto groups = altAxis.groupBy([](auto x) { return x.id; });
