@@ -382,14 +382,23 @@ bool GuiInputConfig::filterTrigger(Input input, InputConfig* config, int inputId
 	// on Linux, some gamepads return both an analog axis and a digital button for the trigger;
 	// we want the analog axis only, so this function removes the button press event
 
-	if(config->getDeviceNbAxes() >= 6)
+	if(config->getDeviceNbAxes() >= 6
+		&& (strstr(config->getDeviceName().c_str(), "PLAYSTATION") != NULL
+	  || strstr(config->getDeviceName().c_str(), "PS3 Ga") != NULL
+	  || strstr(config->getDeviceName().c_str(), "PS(R) Ga") != NULL
+	  // DualShock 4
+	  || strstr(config->getDeviceName().c_str(), "Sony Interactive Entertainment") != NULL
+	  // DualSense - just named "Wireless Controller" - searching for exact match only
+	  || config->getDeviceName().c_str() == "Wireless Controller"
+	  // BigBen kid's PS3 gamepad 146b:0902, matched on SDL GUID because its name "Bigben Interactive Bigben Game Pad" may be too generic
+	  || strcmp(config->getDeviceGUIDString().c_str(), "030000006b1400000209000011010000") == 0))
 	{
 		// digital triggers are unwanted
 		if(input.type == TYPE_BUTTON
-		&& (GUI_INPUT_CONFIG_LIST[inputId].name == "l2"
-		|| GUI_INPUT_CONFIG_LIST[inputId].name == "r2"))
+			&& (GUI_INPUT_CONFIG_LIST[inputId].name == "l2"
+			|| GUI_INPUT_CONFIG_LIST[inputId].name == "r2"))
 		{
-			if(mHoldingInput && mHeldTime < 1000)
+			if(mHoldingInput && mHeldTime < 500)
 			{
 				return false;
 			}
@@ -400,23 +409,22 @@ bool GuiInputConfig::filterTrigger(Input input, InputConfig* config, int inputId
 		}
 	}
 
-	// ignore negative pole for axes 2/5 only when triggers are being configured
-	if(input.type == TYPE_AXIS)
+	// ignore negative pole for axes only when triggers are being configured
+	if(input.value == -1
+		&& input.type == TYPE_AXIS
+		&& (GUI_INPUT_CONFIG_LIST[inputId].name == "l2"
+		|| GUI_INPUT_CONFIG_LIST[inputId].name == "r2"))
 	{
-		if(GUI_INPUT_CONFIG_LIST[inputId].name == "l2"
-		|| GUI_INPUT_CONFIG_LIST[inputId].name == "r2")
+		if(mHoldingInput && mHeldTime < 500)
 		{
-			if(input.value == 1)
-				mSkipAxis = true;
-			else if(input.value == -1)
-				return true;
+			return false;
 		}
-		else if(mSkipAxis)
+		else
 		{
-			mSkipAxis = false;
 			return true;
 		}
 	}
+
 #else
 	(void)input;
 	(void)config;

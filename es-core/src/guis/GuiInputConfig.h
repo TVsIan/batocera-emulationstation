@@ -58,7 +58,6 @@ private:
 	Input mHeldInput;
 	int mHeldTime;
 	int mHeldInputId;
-	bool mSkipAxis;
 
 	BusyComponent mBusyAnim;	
 
