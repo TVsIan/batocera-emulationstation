@@ -189,6 +189,10 @@ GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfi
 
 				mHoldingInput = false;
 
+				LOG(LogDebug) << "Processing inputs for " << GUI_INPUT_CONFIG_LIST[i].name << " :";
+				for(auto alt : mAllInputs)
+					LOG(LogDebug) << " -" << alt.device << ": " << alt.string() <<<< " = " + alt.value;
+
 				if (mHeldInput.type == InputType::TYPE_BUTTON)
 				{
 					auto altAxis = mAllInputs.where([&](auto x) { return x.device == mHeldInput.device && x.type == InputType::TYPE_AXIS; });
@@ -199,6 +203,8 @@ GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfi
 							mHeldInput = altAxis[0];
 					}
 				}
+
+				LOG(LogDebug) << " -> Assigned input : " << mHeldInput.device << ": " << mHeldInput.string() << " = " + mHeldInput.value;
 
 				if(assign(mHeldInput, i))
 					rowDone(); // if successful, move cursor/stop configuring - if not, we'll just try again
