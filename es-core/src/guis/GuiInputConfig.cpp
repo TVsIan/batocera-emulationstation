@@ -191,7 +191,7 @@ GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfi
 
 				LOG(LogDebug) << "Processing inputs for " << GUI_INPUT_CONFIG_LIST[i].name << " :";
 				for(auto alt : mAllInputs)
-					LOG(LogDebug) << " -" << alt.device << ": " << alt.string() <<<< " = " + alt.value;
+					LOG(LogDebug) << " -" << alt.device << ": " << alt.string() << " = " + alt.value;
 
 				if (mHeldInput.type == InputType::TYPE_BUTTON)
 				{
